@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>verl / hub</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #0f0f0f;
+      --surface: #171717;
+      --surface-hover: #1e1e1e;
+      --border: #252525;
+      --border-hover: #3a3a3a;
+      --text: #e2e2e2;
+      --text-muted: #666;
+      --text-dim: #333;
+      --accent: #c8f542;
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      font-weight: 300;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo {
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      color: var(--accent);
+    }
+
+    .logo span { color: var(--text-dim); }
+
+    header time {
+      font-family: var(--mono);
+      font-size: 0.65rem;
+      color: var(--text-dim);
+      margin-left: auto;
+    }
+
+    main {
+      flex: 1;
+      padding: 20px 24px 32px;
+      max-width: 600px;
+      width: 100%;
+      margin: 0 auto;
+    }
+
+    /* ── Square grid ── */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    /* Force square aspect ratio */
+    .card {
+      aspect-ratio: 1 / 1;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 3px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: space-between;
+      padding: 14px;
+      transition: border-color 0.15s, background 0.15s, transform 0.1s;
+      animation: up 0.35s both;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:nth-child(1) { animation-delay: 0.03s }
+    .card:nth-child(2) { animation-delay: 0.06s }
+    .card:nth-child(3) { animation-delay: 0.09s }
+    .card:nth-child(4) { animation-delay: 0.12s }
+    .card:nth-child(5) { animation-delay: 0.15s }
+    .card:nth-child(6) { animation-delay: 0.18s }
+    .card:nth-child(7) { animation-delay: 0.21s }
+
+    @keyframes up {
+      from { opacity: 0; transform: translateY(6px) }
+      to   { opacity: 1; transform: translateY(0) }
+    }
+
+    .card:hover {
+      border-color: var(--border-hover);
+      background: var(--surface-hover);
+      transform: translateY(-1px);
+    }
+
+    .card:active {
+      transform: scale(0.97);
+      transition-duration: 0.06s;
+    }
+
+    /* Accent line on hover */
+    .card::after {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 2px;
+      background: var(--accent);
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover::after { transform: scaleX(1); }
+
+    .card-icon {
+      font-size: 1.3rem;
+      line-height: 1;
+    }
+
+    .card-bottom {
+      width: 100%;
+    }
+
+    .card-name {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 500;
+      color: var(--text);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .card-url {
+      font-family: var(--mono);
+      font-size: 0.56rem;
+      color: var(--text-muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      display: block;
+    }
+
+    /* ── Modal ── */
+    .overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      z-index: 100;
+      display: none;
+      flex-direction: column;
+    }
+
+    .overlay.open { display: flex; }
+
+    .bar {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 14px;
+      background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+    }
+
+    .bar-name {
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      flex: 1;
+    }
+
+    .bar-btn {
+      font-family: var(--mono);
+      font-size: 0.62rem;
+      padding: 4px 10px;
+      border-radius: 2px;
+      border: none;
+      cursor: pointer;
+      background: var(--border);
+      color: var(--text);
+      transition: background 0.1s;
+    }
+
+    .bar-btn:hover { background: var(--border-hover); }
+
+    .bar-btn.primary {
+      background: var(--accent);
+      color: #0f0f0f;
+      font-weight: 500;
+    }
+
+    .bar-btn.primary:hover { background: #d6f854; }
+
+    .bar-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 1.2rem;
+      line-height: 1;
+      padding: 2px 4px;
+      cursor: pointer;
+    }
+
+    .bar-close:hover { color: var(--text); }
+
+    iframe.frame {
+      flex: 1;
+      width: 100%;
+      border: none;
+    }
+
+    .blocked {
+      flex: 1;
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      text-align: center;
+      padding: 40px;
+    }
+
+    .blocked-icon { font-size: 2rem; opacity: 0.5; }
+
+    .blocked-title {
+      font-family: var(--mono);
+      font-size: 0.75rem;
+      color: var(--text);
+    }
+
+    .blocked-desc {
+      font-size: 0.7rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      max-width: 260px;
+    }
+
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 10px 24px;
+    }
+
+    footer span {
+      font-family: var(--mono);
+      font-size: 0.58rem;
+      color: var(--text-dim);
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo">verl<span>·</span>hub</div>
+  <time id="clock">--:--</time>
+</header>
+
+<main>
+  <div class="grid" id="grid"></div>
+</main>
+
+<footer>
+  <span>7 platforms</span>
+</footer>
+
+<!-- Modal -->
+<div class="overlay" id="overlay">
+  <div class="bar">
+    <span class="bar-name" id="barName">—</span>
+    <button class="bar-btn primary" id="btnOpen">↗ open</button>
+    <button class="bar-close" id="btnClose">×</button>
+  </div>
+  <iframe class="frame" id="frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
+  <div class="blocked" id="blocked">
+    <div class="blocked-icon">⊘</div>
+    <div class="blocked-title">embed diblok</div>
+    <div class="blocked-desc">Situs ini tidak mengizinkan embed. Buka langsung di browser.</div>
+    <button class="bar-btn primary" id="btnBlockedOpen">↗ buka di browser</button>
+  </div>
+</div>
+
+<script>
+  const sites = [
+    { name: 'bearblog',   icon: '🐻', url: 'https://bearblog.dev/verlanovich/dashboard/',                                              display: 'bearblog.dev'      },
+    { name: 'status.cafe',icon: '☕', url: 'https://status.cafe/',                                                                      display: 'status.cafe'       },
+    { name: 'bookshelf',  icon: '📚', url: 'https://bookshelf.town/user/verlanovich',                                                   display: 'bookshelf.town'    },
+    { name: 'letterboxd', icon: '🎬', url: 'https://letterboxd.com',                                                                    display: 'letterboxd.com'    },
+    { name: 'neocities',  icon: '🏡', url: 'https://neocities.org/dashboard',                                                           display: 'neocities.org'     },
+    { name: 'nekoweb',    icon: '🐱', url: 'https://nekoweb.org/dashboard/?path=/verlanovich.nekoweb.org&site=verlanovich',             display: 'nekoweb.org'       },
+    { name: 'nikki',      icon: '📔', url: 'https://nikki.top/index.php',                                                               display: 'nikki.top'         },
+  ];
+
+  // Render
+  const grid = document.getElementById('grid');
+  sites.forEach(s => {
+    const card = document.createElement('button');
+    card.className = 'card';
+    card.style.cssText = 'font:inherit;text-align:left;width:100%;';
+    card.innerHTML = `
+      <div class="card-icon">${s.icon}</div>
+      <div class="card-bottom">
+        <span class="card-name">${s.name}</span>
+        <span class="card-url">${s.display}</span>
+      </div>
+    `;
+    card.addEventListener('click', () => open(s));
+    grid.appendChild(card);
+  });
+
+  // Modal
+  const overlay = document.getElementById('overlay');
+  const barName = document.getElementById('barName');
+  const frame   = document.getElementById('frame');
+  const blocked = document.getElementById('blocked');
+  const btnOpen = document.getElementById('btnOpen');
+  const btnClose = document.getElementById('btnClose');
+  const btnBlockedOpen = document.getElementById('btnBlockedOpen');
+  let cur = '';
+
+  function open(s) {
+    cur = s.url;
+    barName.textContent = s.display;
+    frame.style.display = 'block';
+    blocked.style.display = 'none';
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+
+    frame.src = '';
+    setTimeout(() => { frame.src = s.url; }, 30);
+
+    const t = setTimeout(checkBlocked, 5000);
+    frame.onload = () => { clearTimeout(t); checkBlocked(); };
+    frame.onerror = () => { clearTimeout(t); showBlocked(); };
+  }
+
+  function checkBlocked() {
+    try {
+      const loc = frame.contentDocument?.location?.href;
+      if (!loc || loc === 'about:blank') showBlocked();
+    } catch(e) { /* cross-origin = loaded */ }
+  }
+
+  function showBlocked() {
+    frame.style.display = 'none';
+    blocked.style.display = 'flex';
+  }
+
+  function close() {
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+    setTimeout(() => { frame.src = ''; }, 200);
+  }
+
+  btnClose.onclick = close;
+  btnOpen.onclick = () => window.open(cur, '_blank', 'noopener');
+  btnBlockedOpen.onclick = () => window.open(cur, '_blank', 'noopener');
+  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
+
+  // Clock
+  const tick = () => {
+    const n = new Date();
+    document.getElementById('clock').textContent =
+      String(n.getHours()).padStart(2,'0') + ':' + String(n.getMinutes()).padStart(2,'0');
+  };
+  tick();
+  setInterval(tick, 30000);
+</script>
+</body>
+</html>
