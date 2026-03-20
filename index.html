@@ -39,7 +39,6 @@
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: center;
-      gap: 10px;
     }
 
     .logo {
@@ -60,25 +59,24 @@
     main {
       flex: 1;
       padding: 20px 24px 32px;
-      max-width: 600px;
+      max-width: 560px;
       width: 100%;
       margin: 0 auto;
     }
 
-    /* ── Square grid ── */
     .grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 10px;
     }
 
-    /* Force square aspect ratio */
     .card {
       aspect-ratio: 1 / 1;
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 3px;
-      cursor: pointer;
+      text-decoration: none;
+      color: inherit;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
@@ -88,6 +86,7 @@
       animation: up 0.35s both;
       position: relative;
       overflow: hidden;
+      -webkit-tap-highlight-color: transparent;
     }
 
     .card:nth-child(1) { animation-delay: 0.03s }
@@ -114,7 +113,6 @@
       transition-duration: 0.06s;
     }
 
-    /* Accent line on hover */
     .card::after {
       content: '';
       position: absolute;
@@ -128,14 +126,7 @@
 
     .card:hover::after { transform: scaleX(1); }
 
-    .card-icon {
-      font-size: 1.3rem;
-      line-height: 1;
-    }
-
-    .card-bottom {
-      width: 100%;
-    }
+    .card-icon { font-size: 1.3rem; line-height: 1; }
 
     .card-name {
       font-family: var(--mono);
@@ -154,101 +145,6 @@
       overflow: hidden;
       text-overflow: ellipsis;
       display: block;
-    }
-
-    /* ── Modal ── */
-    .overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.88);
-      z-index: 100;
-      display: none;
-      flex-direction: column;
-    }
-
-    .overlay.open { display: flex; }
-
-    .bar {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 9px 14px;
-      background: var(--surface);
-      border-bottom: 1px solid var(--border);
-      flex-shrink: 0;
-    }
-
-    .bar-name {
-      font-family: var(--mono);
-      font-size: 0.68rem;
-      color: var(--text-muted);
-      flex: 1;
-    }
-
-    .bar-btn {
-      font-family: var(--mono);
-      font-size: 0.62rem;
-      padding: 4px 10px;
-      border-radius: 2px;
-      border: none;
-      cursor: pointer;
-      background: var(--border);
-      color: var(--text);
-      transition: background 0.1s;
-    }
-
-    .bar-btn:hover { background: var(--border-hover); }
-
-    .bar-btn.primary {
-      background: var(--accent);
-      color: #0f0f0f;
-      font-weight: 500;
-    }
-
-    .bar-btn.primary:hover { background: #d6f854; }
-
-    .bar-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      font-size: 1.2rem;
-      line-height: 1;
-      padding: 2px 4px;
-      cursor: pointer;
-    }
-
-    .bar-close:hover { color: var(--text); }
-
-    iframe.frame {
-      flex: 1;
-      width: 100%;
-      border: none;
-    }
-
-    .blocked {
-      flex: 1;
-      display: none;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 10px;
-      text-align: center;
-      padding: 40px;
-    }
-
-    .blocked-icon { font-size: 2rem; opacity: 0.5; }
-
-    .blocked-title {
-      font-family: var(--mono);
-      font-size: 0.75rem;
-      color: var(--text);
-    }
-
-    .blocked-desc {
-      font-size: 0.7rem;
-      color: var(--text-muted);
-      line-height: 1.6;
-      max-width: 260px;
     }
 
     footer {
@@ -271,108 +167,70 @@
 </header>
 
 <main>
-  <div class="grid" id="grid"></div>
+  <div class="grid">
+    <a class="card" href="https://bearblog.dev/verlanovich/dashboard/" target="_blank" rel="noopener">
+      <div class="card-icon">🐻</div>
+      <div>
+        <span class="card-name">bearblog</span>
+        <span class="card-url">bearblog.dev</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://status.cafe/" target="_blank" rel="noopener">
+      <div class="card-icon">☕</div>
+      <div>
+        <span class="card-name">status.cafe</span>
+        <span class="card-url">status.cafe</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://bookshelf.town/user/verlanovich" target="_blank" rel="noopener">
+      <div class="card-icon">📚</div>
+      <div>
+        <span class="card-name">bookshelf</span>
+        <span class="card-url">bookshelf.town</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://letterboxd.com" target="_blank" rel="noopener">
+      <div class="card-icon">🎬</div>
+      <div>
+        <span class="card-name">letterboxd</span>
+        <span class="card-url">letterboxd.com</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://neocities.org/dashboard" target="_blank" rel="noopener">
+      <div class="card-icon">🏡</div>
+      <div>
+        <span class="card-name">neocities</span>
+        <span class="card-url">neocities.org</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://nekoweb.org/dashboard/?path=/verlanovich.nekoweb.org&site=verlanovich" target="_blank" rel="noopener">
+      <div class="card-icon">🐱</div>
+      <div>
+        <span class="card-name">nekoweb</span>
+        <span class="card-url">nekoweb.org</span>
+      </div>
+    </a>
+
+    <a class="card" href="https://nikki.top/index.php" target="_blank" rel="noopener">
+      <div class="card-icon">📔</div>
+      <div>
+        <span class="card-name">nikki</span>
+        <span class="card-url">nikki.top</span>
+      </div>
+    </a>
+  </div>
 </main>
 
 <footer>
   <span>7 platforms</span>
 </footer>
 
-<!-- Modal -->
-<div class="overlay" id="overlay">
-  <div class="bar">
-    <span class="bar-name" id="barName">—</span>
-    <button class="bar-btn primary" id="btnOpen">↗ open</button>
-    <button class="bar-close" id="btnClose">×</button>
-  </div>
-  <iframe class="frame" id="frame" sandbox="allow-scripts allow-same-origin allow-forms allow-popups"></iframe>
-  <div class="blocked" id="blocked">
-    <div class="blocked-icon">⊘</div>
-    <div class="blocked-title">embed diblok</div>
-    <div class="blocked-desc">Situs ini tidak mengizinkan embed. Buka langsung di browser.</div>
-    <button class="bar-btn primary" id="btnBlockedOpen">↗ buka di browser</button>
-  </div>
-</div>
-
 <script>
-  const sites = [
-    { name: 'bearblog',   icon: '🐻', url: 'https://bearblog.dev/verlanovich/dashboard/',                                              display: 'bearblog.dev'      },
-    { name: 'status.cafe',icon: '☕', url: 'https://status.cafe/',                                                                      display: 'status.cafe'       },
-    { name: 'bookshelf',  icon: '📚', url: 'https://bookshelf.town/user/verlanovich',                                                   display: 'bookshelf.town'    },
-    { name: 'letterboxd', icon: '🎬', url: 'https://letterboxd.com',                                                                    display: 'letterboxd.com'    },
-    { name: 'neocities',  icon: '🏡', url: 'https://neocities.org/dashboard',                                                           display: 'neocities.org'     },
-    { name: 'nekoweb',    icon: '🐱', url: 'https://nekoweb.org/dashboard/?path=/verlanovich.nekoweb.org&site=verlanovich',             display: 'nekoweb.org'       },
-    { name: 'nikki',      icon: '📔', url: 'https://nikki.top/index.php',                                                               display: 'nikki.top'         },
-  ];
-
-  // Render
-  const grid = document.getElementById('grid');
-  sites.forEach(s => {
-    const card = document.createElement('button');
-    card.className = 'card';
-    card.style.cssText = 'font:inherit;text-align:left;width:100%;';
-    card.innerHTML = `
-      <div class="card-icon">${s.icon}</div>
-      <div class="card-bottom">
-        <span class="card-name">${s.name}</span>
-        <span class="card-url">${s.display}</span>
-      </div>
-    `;
-    card.addEventListener('click', () => open(s));
-    grid.appendChild(card);
-  });
-
-  // Modal
-  const overlay = document.getElementById('overlay');
-  const barName = document.getElementById('barName');
-  const frame   = document.getElementById('frame');
-  const blocked = document.getElementById('blocked');
-  const btnOpen = document.getElementById('btnOpen');
-  const btnClose = document.getElementById('btnClose');
-  const btnBlockedOpen = document.getElementById('btnBlockedOpen');
-  let cur = '';
-
-  function open(s) {
-    cur = s.url;
-    barName.textContent = s.display;
-    frame.style.display = 'block';
-    blocked.style.display = 'none';
-    overlay.classList.add('open');
-    document.body.style.overflow = 'hidden';
-
-    frame.src = '';
-    setTimeout(() => { frame.src = s.url; }, 30);
-
-    const t = setTimeout(checkBlocked, 5000);
-    frame.onload = () => { clearTimeout(t); checkBlocked(); };
-    frame.onerror = () => { clearTimeout(t); showBlocked(); };
-  }
-
-  function checkBlocked() {
-    try {
-      const loc = frame.contentDocument?.location?.href;
-      if (!loc || loc === 'about:blank') showBlocked();
-    } catch(e) { /* cross-origin = loaded */ }
-  }
-
-  function showBlocked() {
-    frame.style.display = 'none';
-    blocked.style.display = 'flex';
-  }
-
-  function close() {
-    overlay.classList.remove('open');
-    document.body.style.overflow = '';
-    setTimeout(() => { frame.src = ''; }, 200);
-  }
-
-  btnClose.onclick = close;
-  btnOpen.onclick = () => window.open(cur, '_blank', 'noopener');
-  btnBlockedOpen.onclick = () => window.open(cur, '_blank', 'noopener');
-  overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
-  document.addEventListener('keydown', e => { if (e.key === 'Escape') close(); });
-
-  // Clock
   const tick = () => {
     const n = new Date();
     document.getElementById('clock').textContent =
